@@ -1,0 +1,5 @@
+fastapi
+transformers
+librosa
+style_bert_vits2
+webrtcvad
