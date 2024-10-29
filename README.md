@@ -47,3 +47,19 @@ LLMを量子化等せずそのまま載せているのでめちゃくちゃVRAM�
 
 - 8GB VRAM 以上
     - RTX 2080で動作確認済
+
+## 高速化について
+
+各サーバーをGCP等のインスタンスに配置するだけで早くなります。シンプルさのため対応しませんが蒸留モデルを使う等で推論速度を上げる他、LLMからstream出力し有効な発話単位で分割し逐次音声合成し音声パケットを送ることで更に短縮されます。適当にやっても1.6秒くらいになります
+
+## Speech-to-Speechモデル
+
+副産物としてASR、LLM、TTSの各サーバーを作れる嬉しさがあり、今回は旧来的なアプローチにしました。end-to-endなモデルを試す場合は [mini-omni2](https://github.com/gpt-omni/mini-omni2) 等を使うと良いと思います。私もtrainingしていますが、stage 2 の modality alignment がうまくいっていません
+
+## 同様のプロジェクトの紹介
+
+- [ggerganov/whisper.cpp/talk-llama](https://github.com/ggerganov/whisper.cpp/tree/master/examples/talk-llama)
+    - より軽量なSTSを探している場合はこちらをおすすめします。
+    - llama.cpp と whisper.cpp と 軽量 tts (edge-tts ライブラリのようなもの, MacのsayコマンドとWinのSpeechSynthesizerに対応) で構築されています
+- [huggingface/speech-to-speech](https://github.com/huggingface/speech-to-speech)
+    - よりちゃんとした実装を探している場合はこちらをおすすめします。
