@@ -163,3 +163,4 @@ cython_debug/
 
 models/*
 !models/.gitkeep
+save_audio/*
