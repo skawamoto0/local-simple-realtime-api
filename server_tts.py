@@ -117,8 +117,8 @@ except Exception as e:
     sys.exit(1)
 
 # --- カスタムモデルのロード ---
-model_dir_name = "tarte"
-model_file = f"{model_dir_name}/tart_e100_s2100.safetensors"
+model_dir_name = "koharune-ami"
+model_file = f"{model_dir_name}/koharune-ami.safetensors"
 config_file = f"{model_dir_name}/config.json"
 style_file = f"{model_dir_name}/style_vectors.npy"
 assets_root = Path("models")
@@ -319,7 +319,6 @@ class TTSRequest(BaseModel):
 )
 async def generate_tts(request: TTSRequest):
     """Simple TTS endpoint using default parameters."""
-    logger.info(f"{request.client.host}:{request.client.port} requested /tts (simple endpoint)")
     try:
         # Use default speaker and style for the simple endpoint
         actual_speaker_id = 0

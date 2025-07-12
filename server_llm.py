@@ -8,7 +8,7 @@ app = FastAPI()
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 # TODO: Modelを動的に選択し、reloadするように修正
-model_id = "google/gemma-2-2b-jpn-it"
+model_id = "google/gemma-3-4b-it"
 
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 model = AutoModelForCausalLM.from_pretrained(
@@ -16,6 +16,10 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map=device,
     torch_dtype=torch.bfloat16 if device == 'cuda' else torch.float32,
 )
+tokenizer.add_special_tokens({"additional_special_tokens": ['<end_of_turn>']})
+
+torch._dynamo.config.cache_size_limit = 1024
+torch.set_float32_matmul_precision('high')
 
 @app.post("/llm/stream")
 async def generate_stream(messages: List[Dict[str, str]]):

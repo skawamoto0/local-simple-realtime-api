@@ -24,7 +24,7 @@ class Session:
         self.buffer = bytes()
         self.audio_frames = []
         self.silence_counter = 0
-        self.silence_duration = 200
+        self.silence_duration = 400
         self.silence_frames = math.ceil(self.silence_duration / self.frame_duration)
         self.user_speech_started = False
         self.user_speech_to_assistant_speech_task = None  # stt (audio to text) -> llm (user text to assistant text) -> tts (assistant text to speech)
@@ -70,7 +70,6 @@ class Session:
                 if not self.user_speech_started and len(self.audio_frames) > self.min_speech_frames:
                     self.user_speech_started = True
                     asyncio.create_task(self.websocket.send_json({"event": "userSpeechStart"}))
-                    """
                     # 既存のタスクが実行中の場合、キャンセル
                     if self.user_speech_to_assistant_speech_task and not self.user_speech_to_assistant_speech_task.done():
                         self.user_speech_to_assistant_speech_task.cancel()
@@ -78,7 +77,6 @@ class Session:
                             await self.user_speech_to_assistant_speech_task
                         except asyncio.CancelledError:
                             pass
-                    """
             elif self.user_speech_started:
                 self.silence_counter += 1
                 if self.silence_counter >= self.silence_frames:
